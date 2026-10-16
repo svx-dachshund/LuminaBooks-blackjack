@@ -32,17 +32,37 @@ contextBridge.exposeInMainWorld('electronAPI', {
     searchBooksDictionary: (title, author) => ipcRenderer.invoke('db:searchBooksDictionary', title, author),
     saveToBooksDictionary: (entry) => ipcRenderer.invoke('db:saveToBooksDictionary', entry),
   },
+  terminal: {
+    spawn: (options) => ipcRenderer.invoke("terminal:spawn", options),
+    write: (data) => ipcRenderer.send('terminal:write', data),
+    kill: () => ipcRenderer.invoke('terminal:kill'),
+    openLog: () => ipcRenderer.invoke('terminal:openLog'),
+    onData: (cb) => {
+      const handler = (_event, chunk) => cb(chunk);
+      ipcRenderer.on('terminal:data', handler);
+      return () => ipcRenderer.removeListener('terminal:data', handler);
+    },
+    onExit: (cb) => {
+      const handler = (_event, code) => cb(code);
+      ipcRenderer.on('terminal:exit', handler);
+      return () => ipcRenderer.removeListener('terminal:exit', handler);
+    },
+  },
 });
 
 document.addEventListener('DOMContentLoaded', () => {
   let lastFocusedElement = null;
 
+  const isXterm = (el) =>
+    !!el && !!el.classList && el.classList.contains('xterm-helper-textarea');
+
   document.addEventListener('focusin', (e) => {
     lastFocusedElement = e.target;
   }, true);
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', () => {
     const activeEl = document.activeElement;
+    if (isXterm(activeEl) || isXterm(lastFocusedElement)) return;
 
     if (lastFocusedElement &&
         (activeEl === document.body || !['INPUT', 'TEXTAREA'].includes(activeEl.tagName)) &&
@@ -52,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }, true);
 
   document.addEventListener('click', () => {
-    if (document.activeElement === document.body && lastFocusedElement) {
+    const activeEl = document.activeElement;
+    if (isXterm(activeEl) || isXterm(lastFocusedElement)) return;
+    if (activeEl === document.body && lastFocusedElement) {
       lastFocusedElement.focus();
     }
   }, true);

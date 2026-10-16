@@ -3,6 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import { initDatabase, getAllBooks, addBook, updateBook, deleteBook, getAllFranchises, addFranchise, updateFranchise, deleteFranchise, getUserProfile, setUserProfile, mergeUserAchievements, migrateFromLocalStorage, searchBooksDictionary, saveToBooksDictionary } from './database.js';
+import { spawnBlackjack, writeToBlackjack, killBlackjack } from './terminal-manager.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -99,6 +100,7 @@ if (!gotTheLock) {
   // Очистка при выходе
   app.on('before-quit', () => {
     (app as any).isQuiting = true;
+    killBlackjack();
     if (tray) {
       tray.destroy();
       tray = null;
@@ -201,6 +203,30 @@ function registerIpcHandlers() {
       throw new Error('External URL is not an approved LuminaBooks release page');
     }
     await shell.openExternal(url.toString());
+  });
+  // --- Terminal (blackjack) ---
+  ipcMain.handle('terminal:spawn', (event, options) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win) spawnBlackjack(win, options || {});
+  });
+
+  ipcMain.handle('terminal:kill', () => {
+    killBlackjack();
+  });
+
+  ipcMain.on('terminal:write', (_event, data) => {
+    if (typeof data === 'string') {
+      writeToBlackjack(data);
+    }
+  });
+
+  ipcMain.handle('terminal:openLog', async () => {
+    const logPath = join(app.getPath('userData'), 'blackjack-data', 'blackjack.log');
+    if (!existsSync(logPath)) {
+      return { ok: false, error: 'not_found' };
+    }
+    await shell.openPath(logPath);
+    return { ok: true };
   });
 }
 

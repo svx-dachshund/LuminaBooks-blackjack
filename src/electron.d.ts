@@ -36,12 +36,31 @@ export interface ElectronDBAPI {
   saveToBooksDictionary: (entry: BookDictEntry) => Promise<void>;
 }
 
+export interface BlackjackOptions {
+  reset?: boolean;
+  log?: boolean;
+  player?: number;
+  dealer?: number;
+  decks?: number;
+  speed?: number;
+}
+
+export interface TerminalAPI {
+  spawn: (options?: BlackjackOptions) => Promise<void>;
+  write: (data: string) => void;
+  kill: () => Promise<void>;
+  openLog: () => Promise<{ ok: boolean; error?: string }>;
+  onData: (cb: (chunk: string) => void) => () => void;
+  onExit: (cb: (code: number | null) => void) => () => void;
+}
+
 export interface ElectronAPI {
   platform: string;
   isMac: boolean;
   isWindows: boolean;
   isLinux: boolean;
   db?: ElectronDBAPI;
+  terminal?: TerminalAPI;
   getServerUrl?: () => Promise<string>;
   getLoginItemSettings?: () => Promise<{ openAtLogin: boolean; openAsHidden: boolean }>;
   setLoginItemSettings?: (settings: { openAtLogin: boolean; openAsHidden?: boolean }) => Promise<void>;

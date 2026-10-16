@@ -1,7 +1,7 @@
 {
-  "name": "luminabooks---personal-book-tracker",
+  "name": "luminabooks",
   "private": true,
-  "version": "1.11.1",
+  "version": "1.12.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -19,6 +19,8 @@
     "@mantine/core": "^7.5.0",
     "@mantine/dates": "^7.5.0",
     "@mantine/hooks": "^7.5.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
     "better-sqlite3": "^12.10.0",
     "dayjs": "^1.11.10",
     "express": "^5.2.1",
@@ -37,7 +39,7 @@
     "autoprefixer": "^10.6.1",
     "concurrently": "^9.2.1",
     "cross-env": "^7.0.3",
-    "electron": "^33.0.0",
+    "electron": "^33.4.11",
     "electron-builder": "^25.1.8",
     "postcss": "^8.5.30",
     "tailwindcss": "^3.4.19",
@@ -46,7 +48,7 @@
     "wait-on": "^8.0.1"
   },
   "author": "История Одного Геймера <gamecuts0412@gmail.com>",
-  "description": "Personal Book Tracker Application",
+  "description": "Personal book tracker with a built-in Blackjack terminal minigame",
   "build": {
     "appId": "com.onegamerstory.luminabooks",
     "productName": "LuminaBooks",
@@ -89,6 +91,41 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    }
-  }
+    },
+    "extraResources": [
+      {
+        "from": "blackjack",
+        "to": "blackjack",
+        "filter": [
+          "**/*",
+          "!*.go",
+          "!README.md",
+          "!.gitignore"
+        ]
+      }
+    ]
+  },
+  "allowScripts": {
+    "electron@33.4.11": true,
+    "better-sqlite3@12.10.0": true,
+    "esbuild@0.25.12": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svx-dachshund/LuminaBooks-blackjack.git"
+  },
+  "homepage": "https://github.com/svx-dachshund/LuminaBooks-blackjack#readme",
+  "bugs": {
+    "url": "https://github.com/svx-dachshund/LuminaBooks-blackjack/issues"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "books",
+    "reading-tracker",
+    "sqlite",
+    "blackjack",
+    "terminal",
+    "xterm"
+  ]
 }

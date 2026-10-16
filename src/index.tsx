@@ -1,4 +1,3 @@
-
 import './index.css';
 import '@fontsource-variable/inter';
 import React from 'react';
@@ -13,9 +12,7 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
 );

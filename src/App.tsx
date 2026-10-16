@@ -6,6 +6,7 @@ import FranchiseView from './components/FranchiseView';
 import CalendarView from './components/CalendarView';
 import StatisticsView from './components/StatisticsView';
 import ReadingView from './components/ReadingView';
+import TerminalView from './components/TerminalView';
 import BookModal from './components/BookModal';
 import BookRatingModal from './components/BookRatingModal';
 import SettingsModal from './components/UserProfileModal';
@@ -13,7 +14,7 @@ import OnboardingModal from './components/OnboardingModal';
 import Toast from './components/Toast';
 import AchievementNotification from './components/AchievementNotification';
 import ConfirmationModal from './components/ConfirmationModal';
-import { Calendar, Library, Languages, BarChart3, Zap, Settings, Link, RefreshCw } from 'lucide-react';
+import { Calendar, Library, Languages, BarChart3, Zap, Settings, Link, RefreshCw, Spade } from 'lucide-react';
 import { useToast } from './hooks/useToast';
 import { useConfirmation } from './hooks/useConfirmation';
 import { useSettings } from './hooks/useSettings';
@@ -186,6 +187,18 @@ const App: React.FC = () => {
               <Zap size={17} />
               <span className="hidden sm:inline">{lang === 'ru' ? 'Чтение' : 'Reading'}</span>
             </button>
+            <button
+              aria-label={t.blackjack}
+              onClick={() => setActiveView('blackjack')}
+              className="flex min-h-10 flex-1 items-center justify-center gap-2 rounded-lg px-1 py-2 text-sm font-medium transition-all sm:flex-none sm:px-3"
+              style={{
+                backgroundColor: activeView === 'blackjack' ? 'var(--accent)' : 'transparent',
+                color: activeView === 'blackjack' ? 'var(--accent-on)' : 'var(--muted)',
+              }}
+            >
+              <Spade size={17} />
+              <span className="hidden sm:inline">{t.blackjack}</span>
+            </button>
           </nav>
 
           <div className="flex items-center gap-1">
@@ -265,6 +278,8 @@ const App: React.FC = () => {
             onUpdateBook={handleUpdateBook}
             lang={lang}
           />
+        ) : activeView === 'blackjack' ? (
+          <TerminalView lang={lang} />
         ) : (
           <StatisticsView 
             books={books} 

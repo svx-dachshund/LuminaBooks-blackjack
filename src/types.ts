@@ -1,4 +1,3 @@
-
 export enum BookStatus {
   READING = 'READING',
   READ = 'READ',
@@ -9,19 +8,19 @@ export enum BookStatus {
 
 export interface ReadingSession {
   id: string;
-  startTime: string; // ISO timestamp
-  endTime: string; // ISO timestamp
-  duration: number; // в секундах
-  startPage?: number; // Страница, с которой начали сессию
-  endPage?: number; // Страница, на которой закончили сессию
-  pagesRead?: number; // Вычисленное количество прочитанных страниц (endPage - startPage)
-  startPercentage?: number; // Процент, с которого начали сессию
-  endPercentage?: number; // Процент, на котором закончили сессию
-  percentageRead?: number; // Вычисленное количество прочитанных процентов (endPercentage - startPercentage)
+  startTime: string;
+  endTime: string;
+  duration: number;
+  startPage?: number;
+  endPage?: number;
+  pagesRead?: number;
+  startPercentage?: number;
+  endPercentage?: number;
+  percentageRead?: number;
 }
 
 export interface StatusChange {
-  timestamp: string; // ISO timestamp
+  timestamp: string;
   previousStatus: BookStatus;
   newStatus: BookStatus;
 }
@@ -34,17 +33,17 @@ export interface Book {
   coverUrl: string;
   status: BookStatus;
   rating: number;
-  startDate: string; // ISO string YYYY-MM-DD
-  endDate: string;   // ISO string YYYY-MM-DD
+  startDate: string;
+  endDate: string;
   description?: string;
-  totalPages?: number; // Всего страниц в книге
-  currentPage?: number; // Текущая страница прочитанной книги
-  currentPercentage?: number; // Текущий процент прочитанной книги
-  isPartOfSeries?: boolean; // Является ли книга частью цикла/коллекции
-  franchiseIds?: string[]; // IDs коллекции, к которым принадлежит книга
+  totalPages?: number;
+  currentPage?: number;
+  currentPercentage?: number;
+  isPartOfSeries?: boolean;
+  franchiseIds?: string[];
   sessions?: ReadingSession[];
-  statusHistory?: StatusChange[]; // История смены статусов
-  inQueue?: boolean; // Находится ли книга в очереди чтения
+  statusHistory?: StatusChange[];
+  inQueue?: boolean;
 }
 
 export interface Franchise {
@@ -52,9 +51,15 @@ export interface Franchise {
   name: string;
   description?: string;
   coverUrl?: string;
-  bookIds: string[]; // IDs книг в этой коллекции
-  createdAt: string; // ISO timestamp
-  updatedAt: string; // ISO timestamp
+  bookIds: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
-export type ViewType = 'catalog' | 'collections' | 'calendar' | 'statistics' | 'reading';
+export type ViewType =
+  | 'catalog'
+  | 'collections'
+  | 'calendar'
+  | 'statistics'
+  | 'reading'
+  | 'blackjack';
